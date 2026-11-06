@@ -1,0 +1,49 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { coverSvg } from '../lib/covers';
+import { projectMedia } from '../lib/media';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  sizes?: string;
+  eager?: boolean;
+}
+const { project, sizes = '(max-width: 720px) 100vw, 400px', eager = false } = Astro.props;
+const { title, field } = project.data;
+const { cover, coverSvg: customSvg } = projectMedia(project.id);
+---
+
+<div class="cover">
+  {
+    customSvg ? (
+      <Fragment set:html={customSvg} />
+    ) : cover ? (
+      <Image
+        src={cover}
+        alt={`Screenshot of ${title}`}
+        widths={[400, 800, 1200].filter((w) => w < cover.width).concat(cover.width)}
+        sizes={sizes}
+        loading={eager ? 'eager' : 'lazy'}
+      />
+    ) : (
+      <Fragment set:html={coverSvg({ slug: project.id, field, title })} />
+    )
+  }
+</div>
+
+<style>
+  .cover {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #070912;
+  }
+  .cover :global(svg),
+  .cover :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

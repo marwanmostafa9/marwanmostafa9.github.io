@@ -1,0 +1,231 @@
+@import '@fontsource-variable/space-grotesk';
+@import '@fontsource-variable/inter';
+@import '@fontsource/jetbrains-mono/400.css';
+
+:root {
+  --bg: #04050b;
+  --bg-2: #0a0c18;
+  --surface: rgba(18, 21, 40, 0.72);
+  --border: rgba(160, 170, 255, 0.14);
+  --text: #e8eaf6;
+  --muted: #8d93b5;
+  --accent: #a78bfa;
+  --accent-2: #38bdf8;
+  --font-display: 'Space Grotesk Variable', system-ui, sans-serif;
+  --font-body: 'Inter Variable', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --gutter: clamp(16px, 4vw, 48px);
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  line-height: 1.1;
+  margin: 0;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.75em 1.3em;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font: 500 0.95rem var(--font-body);
+  text-decoration: none;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+.btn:hover {
+  border-color: rgba(167, 139, 250, 0.6);
+  background: rgba(167, 139, 250, 0.12);
+  transform: translateY(-1px);
+}
+.btn.primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border-color: transparent;
+  color: #0b0b18;
+  font-weight: 600;
+}
+.btn.primary:hover {
+  filter: brightness(1.1);
+}
+
+.section {
+  padding: clamp(80px, 12vw, 140px) var(--gutter);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-kicker {
+  font: 400 0.8rem var(--font-mono);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.section h2 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  margin: 0.3em 0 0.6em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* Long-form text on project pages */
+.prose {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: #cfd3ea;
+  max-width: 68ch;
+}
+.prose > :first-child {
+  margin-top: 0;
+}
+.prose h2,
+.prose h3 {
+  color: var(--text);
+  margin: 2em 0 0.6em;
+}
+.prose h2 {
+  font-size: 1.6rem;
+}
+.prose h3 {
+  font-size: 1.25rem;
+}
+.prose a {
+  color: var(--c, var(--accent));
+}
+.prose em {
+  color: var(--muted);
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.3em;
+}
+.prose li::marker {
+  color: var(--c, var(--accent));
+}
+.prose code {
+  font: 0.88em var(--font-mono);
+  padding: 0.15em 0.4em;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+}
+.prose pre {
+  padding: 18px;
+  border-radius: 12px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+}
+.prose pre code {
+  padding: 0;
+  background: none;
+}
+.prose img {
+  max-width: 100%;
+  border-radius: 12px;
+}
+.prose blockquote {
+  margin: 1.5em 0;
+  padding-left: 1.2em;
+  border-left: 3px solid var(--c, var(--accent));
+  color: var(--muted);
+}
+
+/* Inline SVG diagrams inside project write-ups */
+.prose .diagram {
+  margin: 2em 0;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  overflow-x: auto;
+}
+.prose .diagram svg {
+  display: block;
+  width: 100%;
+  min-width: 640px;
+  height: auto;
+}
+.diagram .d-box {
+  fill: #0b0e1c;
+  stroke: color-mix(in srgb, var(--c, var(--accent)) 55%, transparent);
+  stroke-width: 1.5;
+}
+.diagram .d-hi {
+  fill: color-mix(in srgb, var(--c, var(--accent)) 16%, #0b0e1c);
+  stroke: var(--c, var(--accent));
+}
+.diagram .d-t {
+  fill: var(--text);
+  font: 600 14px var(--font-body);
+  text-anchor: middle;
+}
+.diagram .d-tag {
+  fill: var(--c, var(--accent));
+  font: 11px var(--font-mono);
+  letter-spacing: 0.04em;
+}
+.diagram .d-sub {
+  fill: var(--muted);
+  font: 11px var(--font-mono);
+  text-anchor: middle;
+}
+.diagram .d-line path {
+  fill: none;
+  stroke: color-mix(in srgb, var(--c, var(--accent)) 60%, transparent);
+  stroke-width: 1.5;
+}
+.diagram .d-line .d-dim {
+  stroke: var(--muted);
+  stroke-dasharray: 4 4;
+}
+.diagram .d-head {
+  fill: var(--c, var(--accent));
+}

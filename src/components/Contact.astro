@@ -1,0 +1,340 @@
+---
+import Icon from './Icon.astro';
+import { SITE } from '../config/site';
+
+const { email, linkedin, github, phone } = SITE.socials;
+const phoneLabel = phone ? `+${phone.slice(0, 2)} ${phone.slice(2, 5)} ${phone.slice(5, 8)} ${phone.slice(8)}` : '';
+const handle = (url: string) => url.replace(/\/$/, '').split('/').pop();
+---
+
+<section class="section contact" id="contact">
+  <div class="beacon" aria-hidden="true">
+    <span></span><span></span><span></span><i></i>
+  </div>
+
+  <div class="intro">
+    <p class="section-kicker">// front desk</p>
+    <h2>Let's build something <span class="grad">intelligent.</span></h2>
+    <p class="lead">
+      Have a role, a project or an idea that needs AI? Send me a signal. I'm always happy to talk about LLMs,
+      agents and computer vision.
+    </p>
+    {
+      email && (
+        <a class="btn primary" href={`mailto:${email}`}>
+          <Icon name="mail" size={18} /> Email me
+        </a>
+      )
+    }
+  </div>
+
+  <ul class="channels">
+    {
+      email && (
+        <li style="--c:#a78bfa">
+          <a href={`mailto:${email}`} class="row">
+            <span class="ic"><Icon name="mail" /></span>
+            <span class="txt">
+              <span class="k mono">email</span>
+              <span class="v">{email}</span>
+            </span>
+          </a>
+          <button type="button" class="act copy" data-copy={email} aria-label="Copy email address" title="Copy">
+            <span class="i-copy"><Icon name="copy" size={18} /></span>
+            <span class="i-ok"><Icon name="check" size={18} /></span>
+          </button>
+        </li>
+      )
+    }
+    {
+      linkedin && (
+        <li style="--c:#38bdf8">
+          <a href={linkedin} class="row" target="_blank" rel="noopener">
+            <span class="ic"><Icon name="linkedin" /></span>
+            <span class="txt">
+              <span class="k mono">linkedin</span>
+              <span class="v">{SITE.name}</span>
+            </span>
+            <span class="go"><Icon name="arrow" size={18} /></span>
+          </a>
+        </li>
+      )
+    }
+    {
+      github && (
+        <li style="--c:#e8eaf6">
+          <a href={github} class="row" target="_blank" rel="noopener">
+            <span class="ic"><Icon name="github" /></span>
+            <span class="txt">
+              <span class="k mono">github</span>
+              <span class="v">@{handle(github)}</span>
+            </span>
+            <span class="go"><Icon name="arrow" size={18} /></span>
+          </a>
+        </li>
+      )
+    }
+    {
+      phone && (
+        <li style="--c:#34d399">
+          <a href={`https://wa.me/${phone}`} class="row" target="_blank" rel="noopener">
+            <span class="ic"><Icon name="whatsapp" /></span>
+            <span class="txt">
+              <span class="k mono">whatsapp · phone</span>
+              <span class="v">{phoneLabel}</span>
+            </span>
+            <span class="go"><Icon name="arrow" size={18} /></span>
+          </a>
+          <a class="act" href={`tel:+${phone}`} aria-label={`Call ${phoneLabel}`} title="Call">
+            <Icon name="phone" size={18} />
+          </a>
+        </li>
+      )
+    }
+  </ul>
+</section>
+
+<style>
+  .contact {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: clamp(32px, 6vw, 80px);
+    align-items: center;
+    overflow: hidden;
+  }
+  .intro {
+    position: relative;
+    z-index: 1;
+  }
+  h2 {
+    font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+    letter-spacing: -0.02em;
+  }
+  .grad {
+    background: linear-gradient(120deg, #c4b5fd, #7dd3fc 60%, #6ee7b7);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .lead {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 44ch;
+    margin: 0 0 28px;
+  }
+
+  /* pulsing signal behind the heading */
+  .beacon {
+    position: absolute;
+    left: clamp(120px, 22vw, 300px);
+    top: 50%;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+  .beacon i {
+    position: absolute;
+    left: -4px;
+    top: -4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #c4b5fd;
+    box-shadow:
+      0 0 12px 4px rgba(167, 139, 250, 0.6),
+      0 0 80px 30px rgba(167, 139, 250, 0.12);
+  }
+  .beacon span {
+    position: absolute;
+    left: -260px;
+    top: -260px;
+    width: 520px;
+    height: 520px;
+    border-radius: 50%;
+    border: 1px solid rgba(167, 139, 250, 0.35);
+    transform: scale(0.05);
+    opacity: 0;
+    animation: ping 6s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+  }
+  .beacon span:nth-child(2) {
+    animation-delay: 2s;
+  }
+  .beacon span:nth-child(3) {
+    animation-delay: 4s;
+  }
+  @keyframes ping {
+    0% {
+      transform: scale(0.05);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.9;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0;
+    }
+  }
+
+  .channels {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .channels li {
+    display: flex;
+    gap: 8px;
+    min-width: 0;
+  }
+  .row {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 18px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--surface);
+    backdrop-filter: blur(10px);
+    text-decoration: none;
+    transition:
+      border-color 0.25s,
+      transform 0.25s,
+      box-shadow 0.25s;
+  }
+  .ic {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    color: var(--c);
+    background: color-mix(in srgb, var(--c) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--c) 25%, transparent);
+  }
+  .txt {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .k {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .v {
+    font: 500 1.02rem var(--font-display);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .go {
+    margin-left: auto;
+    color: var(--muted);
+    transition:
+      transform 0.25s,
+      color 0.25s;
+  }
+  .row:hover,
+  .row:focus-visible {
+    border-color: color-mix(in srgb, var(--c) 55%, transparent);
+    transform: translateX(4px);
+    box-shadow: 0 10px 40px -14px color-mix(in srgb, var(--c) 60%, transparent);
+    outline: none;
+  }
+  .row:hover .go,
+  .row:focus-visible .go {
+    color: var(--c);
+    transform: translate(3px, -3px);
+  }
+
+  .act {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 58px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition:
+      color 0.2s,
+      border-color 0.2s;
+  }
+  .act:hover,
+  .act:focus-visible {
+    color: var(--c);
+    border-color: color-mix(in srgb, var(--c) 55%, transparent);
+    outline: none;
+  }
+  .copy .i-ok {
+    display: none;
+  }
+  .copy.done .i-copy {
+    display: none;
+  }
+  .copy.done .i-ok {
+    display: block;
+    color: #34d399;
+  }
+
+  @media (max-width: 860px) {
+    .contact {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .beacon {
+      left: 70%;
+      top: 22%;
+    }
+  }
+  @media (max-width: 420px) {
+    .row {
+      gap: 12px;
+      padding: 14px;
+    }
+    .ic {
+      width: 38px;
+      height: 38px;
+    }
+    .v {
+      font-size: 0.88rem;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+    .act {
+      width: 50px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .beacon span {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.contact .copy').forEach((btn) =>
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy!);
+        btn.classList.add('done');
+        btn.setAttribute('aria-label', 'Copied');
+        setTimeout(() => {
+          btn.classList.remove('done');
+          btn.setAttribute('aria-label', 'Copy email address');
+        }, 1800);
+      } catch {
+        location.href = `mailto:${btn.dataset.copy}`;
+      }
+    }),
+  );
+</script>

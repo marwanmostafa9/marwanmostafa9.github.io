@@ -1,0 +1,521 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { getCertificates } from '../lib/certificates';
+
+const certs = await getCertificates();
+const shelves = [
+  { id: 'course', label: 'courses', items: certs.filter((c) => c.shelf === 'course') },
+  { id: 'recognition', label: 'recognition', items: certs.filter((c) => c.shelf === 'recognition') },
+].filter((s) => s.items.length);
+
+// Large version for the viewer
+const full = Object.fromEntries(
+  await Promise.all(
+    certs.map(async (c) => [c.id, (await getImage({ src: c.img, width: Math.min(1600, c.img.width) })).src]),
+  ),
+);
+---
+
+<section class="section shelf-section" id="certificates">
+  <p class="section-kicker">// hall of honors</p>
+  <div class="head">
+    <h2>Hall of Honors</h2>
+    <p class="count mono">{certs.length} certificates</p>
+  </div>
+
+  {
+    shelves.map((shelf) => (
+      <div class="shelf" data-shelf={shelf.id}>
+        <p class="shelf-label mono">
+          {shelf.label} <span>· {shelf.items.length}</span>
+        </p>
+        <div class="scroller">
+          <ul class="track">
+            {shelf.items.map((c, i) => (
+              <li style={`--c:${c.accent}; --ar:${c.img.width / c.img.height}; --i:${i}`}>
+                <button
+                  type="button"
+                  class="cert"
+                  data-id={c.id}
+                  data-full={full[c.id]}
+                  data-title={c.title}
+                  data-issuer={c.issuer}
+                  data-when={c.when}
+                  data-note={c.note ?? ''}
+                  data-url={c.url ?? ''}
+                  data-accent={c.accent}
+                  aria-label={`${c.title}, ${c.issuer}${c.when ? `, ${c.when}` : ''}. Open certificate`}
+                >
+                  <span class="frame">
+                    <Image
+                      src={c.img}
+                      alt=""
+                      widths={[320, 640].filter((w) => w < c.img.width).concat(c.img.width)}
+                      sizes="320px"
+                    />
+                    <span class="sheen" aria-hidden="true" />
+                  </span>
+                </button>
+                <div class="plate">
+                  <p class="t">{c.title}</p>
+                  <p class="m mono">
+                    {c.issuer}
+                    {c.when && <> · {c.when}</>}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    ))
+  }
+
+  <dialog class="cert-viewer" aria-label="Certificate">
+    <button type="button" class="close" aria-label="Close">✕</button>
+    <button type="button" class="nav prev" aria-label="Previous certificate">‹</button>
+    <div class="body">
+      <img alt="" />
+      <div class="info">
+        <p class="v-issuer mono"></p>
+        <h3 class="v-title"></h3>
+        <p class="v-when mono"></p>
+        <p class="v-note"></p>
+        <a class="btn v-url" target="_blank" rel="noopener">Verify ↗</a>
+        <p class="v-pos mono"></p>
+      </div>
+    </div>
+    <button type="button" class="nav next" aria-label="Next certificate">›</button>
+  </dialog>
+</section>
+
+<style>
+  .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .count {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  .shelf {
+    --h: clamp(92px, 10vw, 124px);
+    --pad: 7px;
+    --top: 56px;
+    position: relative;
+    margin-top: 28px;
+  }
+  .shelf + .shelf {
+    margin-top: 56px;
+  }
+  .shelf-label {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .shelf-label span {
+    color: color-mix(in srgb, var(--muted) 60%, transparent);
+  }
+
+  .scroller {
+    position: relative;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+    /* keep hover lift and the light cone inside the scroll box */
+    padding-top: var(--top);
+  }
+  .scroller::-webkit-scrollbar {
+    display: none;
+  }
+
+  .track {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    width: max-content;
+    min-width: 100%;
+    margin: 0;
+    padding: 0 8px 4px;
+    list-style: none;
+    perspective: 900px;
+  }
+  li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: max(150px, calc(var(--h) * var(--ar) + 2 * var(--pad) + 2px));
+    scroll-snap-align: center;
+  }
+
+  /* glass shelf under the row of frames (spans the full scroll width) */
+  .track::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    right: 0;
+    top: calc(var(--h) + 2 * var(--pad) + 2px);
+    height: 14px;
+    border-radius: 3px;
+    background:
+      linear-gradient(to bottom, rgba(220, 225, 255, 0.28), rgba(220, 225, 255, 0.08) 3px, rgba(120, 130, 220, 0.12) 4px, rgba(40, 45, 90, 0.35)),
+      linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.25) 30%, rgba(56, 189, 248, 0.25) 70%, transparent);
+    box-shadow:
+      0 18px 30px -12px rgba(0, 0, 0, 0.9),
+      0 0 40px -10px rgba(167, 139, 250, 0.45);
+  }
+
+  .cert {
+    position: relative;
+    display: block;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: zoom-in;
+    transform-origin: 50% 100%;
+    transform: rotateX(7deg);
+    transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  /* light cone from above on hover */
+  .cert::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 30%;
+    width: 180%;
+    height: calc(100% + var(--top));
+    transform: translateX(-50%);
+    background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--c) 22%, transparent));
+    clip-path: polygon(42% 0, 58% 0, 100% 100%, 0 100%);
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+    z-index: -1;
+  }
+  /* shadow on the shelf */
+  .cert::after {
+    content: '';
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    bottom: -6px;
+    height: 12px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(0, 0, 0, 0.85), transparent);
+    z-index: -1;
+    transition:
+      opacity 0.45s,
+      transform 0.45s;
+  }
+  .frame {
+    position: relative;
+    display: block;
+    height: calc(var(--h) + 2 * var(--pad) + 2px);
+    padding: var(--pad);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 6px;
+    background: linear-gradient(160deg, #1d2036, #0d0f1c);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 10px 24px -8px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+    transition:
+      border-color 0.3s,
+      box-shadow 0.3s;
+  }
+  .frame :global(img) {
+    display: block;
+    height: var(--h);
+    width: auto;
+    border-radius: 2px;
+  }
+  .sheen {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.16) 50%, transparent 65%);
+    transform: translateX(-120%);
+    transition: transform 0.8s ease;
+    pointer-events: none;
+  }
+
+  .cert:hover,
+  .cert:focus-visible {
+    transform: translateY(-14px) rotateX(0deg) scale(1.06);
+  }
+  .cert:hover::before,
+  .cert:focus-visible::before {
+    opacity: 1;
+  }
+  .cert:hover::after,
+  .cert:focus-visible::after {
+    opacity: 0.5;
+    transform: translateY(14px) scaleX(0.85);
+  }
+  .cert:hover .frame,
+  .cert:focus-visible .frame {
+    border-color: color-mix(in srgb, var(--c) 70%, transparent);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 0 0 1px color-mix(in srgb, var(--c) 30%, transparent),
+      0 18px 40px -10px color-mix(in srgb, var(--c) 55%, transparent);
+  }
+  .cert:hover .sheen,
+  .cert:focus-visible .sheen {
+    transform: translateX(120%);
+  }
+  .cert:focus-visible {
+    outline: none;
+  }
+
+  .plate {
+    margin-top: 26px;
+    text-align: center;
+    max-width: 100%;
+  }
+  .plate .t {
+    margin: 0;
+    font: 600 0.85rem/1.3 var(--font-display);
+    color: var(--text);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .plate .m {
+    margin: 4px 0 0;
+    font-size: 0.68rem;
+    color: var(--muted);
+  }
+  li:has(.cert:hover) .plate .t {
+    color: color-mix(in srgb, var(--c) 45%, #fff);
+  }
+
+  /* frames drop onto the shelf when it scrolls into view */
+  .shelf-section.armed .cert {
+    opacity: 0;
+    transform: translateY(-40px) rotateX(25deg);
+  }
+  .shelf-section.armed.in .cert {
+    opacity: 1;
+    transform: rotateX(7deg);
+    transition:
+      opacity 0.5s calc(var(--i) * 90ms),
+      transform 0.8s cubic-bezier(0.34, 1.4, 0.5, 1) calc(var(--i) * 90ms);
+  }
+  .shelf-section.armed.in .cert:hover,
+  .shelf-section.armed.in .cert:focus-visible {
+    transform: translateY(-14px) rotateX(0deg) scale(1.06);
+    transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  /* viewer */
+  .cert-viewer {
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgba(4, 5, 11, 0.96);
+    backdrop-filter: blur(10px);
+    color: var(--text);
+  }
+  .cert-viewer[open] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cert-viewer::backdrop {
+    background: transparent;
+  }
+  .body {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    max-width: min(1200px, calc(100vw - 160px));
+  }
+  .body img {
+    max-width: min(760px, 62vw);
+    max-height: calc(100vh - 140px);
+    border-radius: 8px;
+    box-shadow: 0 30px 80px -20px color-mix(in srgb, var(--c, #a78bfa) 45%, transparent);
+  }
+  .info {
+    min-width: 220px;
+    max-width: 320px;
+  }
+  .v-issuer {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--c, var(--accent));
+  }
+  .v-title {
+    margin: 10px 0 8px;
+    font-size: 1.6rem;
+  }
+  .v-when {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .v-note {
+    margin: 14px 0 0;
+    color: var(--muted);
+  }
+  .v-url {
+    margin-top: 20px;
+  }
+  .v-pos {
+    margin: 28px 0 0;
+    font-size: 0.75rem;
+    color: color-mix(in srgb, var(--muted) 70%, transparent);
+  }
+  .cert-viewer button {
+    position: absolute;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text);
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .close {
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+  }
+  .nav {
+    top: 50%;
+    width: 48px;
+    height: 48px;
+    font-size: 1.6rem;
+    transform: translateY(-50%);
+  }
+  .prev {
+    left: 20px;
+  }
+  .next {
+    right: 20px;
+  }
+
+  @media (max-width: 860px) {
+    .body {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 18px;
+      max-width: calc(100vw - 32px);
+    }
+    .body img {
+      max-width: 100%;
+      max-height: 55vh;
+    }
+    .info {
+      max-width: none;
+    }
+    .v-title {
+      font-size: 1.3rem;
+    }
+    .nav {
+      top: auto;
+      bottom: 20px;
+      transform: none;
+    }
+  }
+  @media (max-width: 720px) {
+    .shelf {
+      --top: 40px;
+    }
+    .scroller {
+      margin: 0 calc(-1 * var(--gutter));
+    }
+    .scroller {
+      -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 48px), transparent);
+      mask-image: linear-gradient(90deg, #000 calc(100% - 48px), transparent);
+    }
+    .track {
+      justify-content: flex-start;
+      padding: 0 calc(var(--gutter) + 24px) 4px var(--gutter);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cert,
+    .sheen,
+    .shelf-section.armed.in .cert {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const section = document.querySelector<HTMLElement>('.shelf-section');
+  if (section) {
+    // drop-in animation
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+      section.classList.add('armed');
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            section.classList.add('in');
+            io.disconnect();
+          }
+        },
+        { threshold: 0.2 },
+      );
+      io.observe(section);
+    }
+
+    // viewer
+    const dialog = section.querySelector<HTMLDialogElement>('.cert-viewer')!;
+    const img = dialog.querySelector('img')!;
+    const q = (s: string) => dialog.querySelector<HTMLElement>(s)!;
+    const link = q('.v-url') as HTMLAnchorElement;
+    const items = [...section.querySelectorAll<HTMLButtonElement>('.cert')];
+    let index = 0;
+
+    function show(i: number) {
+      index = (i + items.length) % items.length;
+      const d = items[index].dataset;
+      dialog.style.setProperty('--c', d.accent!);
+      img.src = d.full!;
+      img.alt = `${d.title} certificate from ${d.issuer}`;
+      q('.v-issuer').textContent = d.issuer!;
+      q('.v-title').textContent = d.title!;
+      q('.v-when').textContent = d.when!;
+      q('.v-when').hidden = !d.when;
+      q('.v-note').textContent = d.note!;
+      q('.v-note').hidden = !d.note;
+      link.href = d.url || '#';
+      link.hidden = !d.url;
+      q('.v-pos').textContent = `${index + 1} / ${items.length}`;
+    }
+
+    items.forEach((item, i) =>
+      item.addEventListener('click', () => {
+        show(i);
+        dialog.showModal();
+      }),
+    );
+    q('.close').addEventListener('click', () => dialog.close());
+    q('.prev').addEventListener('click', () => show(index - 1));
+    q('.next').addEventListener('click', () => show(index + 1));
+    dialog.addEventListener('click', (e) => e.target === dialog && dialog.close());
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(index - 1);
+      if (e.key === 'ArrowRight') show(index + 1);
+    });
+  }
+</script>

@@ -1,0 +1,72 @@
+<svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Football pitch with a pass network feeding three AI agents: player ratings, match summary and tactics">
+<defs>
+<radialGradient id="fb-bg" cx=".35" cy=".45" r=".75"><stop offset="0" stop-color="#34d399" stop-opacity=".22"/><stop offset="1" stop-color="#34d399" stop-opacity="0"/></radialGradient>
+<radialGradient id="fb-heat" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#34d399" stop-opacity=".45"/><stop offset="1" stop-color="#34d399" stop-opacity="0"/></radialGradient>
+<pattern id="fb-dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#fff" fill-opacity=".07"/></pattern>
+<pattern id="fb-grass" width="46" height="330" patternUnits="userSpaceOnUse"><rect width="23" height="330" fill="#34d399" fill-opacity=".035"/></pattern>
+<filter id="fb-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="800" height="450" fill="#070912"/>
+<rect width="800" height="450" fill="url(#fb-bg)"/>
+<rect width="800" height="450" fill="url(#fb-dots)"/>
+<!-- pitch -->
+<rect x="40" y="70" width="460" height="330" fill="url(#fb-grass)"/>
+<ellipse cx="300" cy="190" rx="120" ry="85" fill="url(#fb-heat)"/>
+<g fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="1.5">
+<rect x="40" y="70" width="460" height="330" rx="2"/>
+<path d="M270 70V400"/>
+<circle cx="270" cy="235" r="45"/>
+<rect x="40" y="150" width="70" height="170"/>
+<rect x="430" y="150" width="70" height="170"/>
+<rect x="40" y="198" width="24" height="74"/>
+<rect x="476" y="198" width="24" height="74"/>
+<path d="M110 205A40 40 0 0 1 110 265M430 205A40 40 0 0 0 430 265"/>
+<rect x="31" y="215" width="9" height="40"/>
+<rect x="500" y="215" width="9" height="40"/>
+</g>
+<circle cx="270" cy="235" r="2.5" fill="#fff" fill-opacity=".4"/>
+<!-- pass network -->
+<g fill="none" stroke="#34d399" stroke-opacity=".65" stroke-width="1.6" stroke-dasharray="5 5">
+<path d="M62 235L122 195L200 160L330 140"/>
+<path d="M122 275L200 235L330 235"/>
+<path d="M200 310L330 330"/>
+<path d="M200 160L200 235M122 130L200 160M122 340L200 310"/>
+</g>
+<!-- opponents -->
+<g fill="#fff" fill-opacity=".5">
+<circle cx="478" cy="235" r="6"/>
+<circle cx="420" cy="125" r="6"/><circle cx="420" cy="200" r="6"/><circle cx="420" cy="270" r="6"/><circle cx="420" cy="345" r="6"/>
+<circle cx="365" cy="105" r="6"/><circle cx="372" cy="190" r="6"/><circle cx="372" cy="285" r="6"/><circle cx="365" cy="365" r="6"/>
+<circle cx="292" cy="190" r="6"/><circle cx="292" cy="285" r="6"/>
+</g>
+<!-- team, 4-3-3 -->
+<g fill="#34d399" stroke="#070912" stroke-width="2.5">
+<circle cx="62" cy="235" r="8"/>
+<circle cx="122" cy="130" r="8"/><circle cx="122" cy="195" r="8"/><circle cx="122" cy="275" r="8"/><circle cx="122" cy="340" r="8"/>
+<circle cx="200" cy="160" r="8"/><circle cx="200" cy="235" r="8"/><circle cx="200" cy="310" r="8"/>
+<circle cx="330" cy="140" r="8"/><circle cx="330" cy="330" r="8"/>
+</g>
+<circle cx="330" cy="235" r="11" fill="#34d399" stroke="#fff" stroke-width="2.5" filter="url(#fb-glow)"/>
+<circle cx="344" cy="226" r="4.5" fill="#fff" filter="url(#fb-glow)"/>
+<!-- links from pitch to agents -->
+<g fill="none" stroke="#34d399" stroke-opacity=".5" stroke-width="1.5">
+<path d="M500 235C525 235 520 140 548 140"/>
+<path d="M500 235H548"/>
+<path d="M500 235C525 235 520 330 548 330"/>
+</g>
+<!-- agents -->
+<g font-family="JetBrains Mono, ui-monospace, monospace">
+<rect x="548" y="106" width="220" height="68" rx="12" fill="#0b0e1c" stroke="#34d399" stroke-opacity=".6" stroke-width="1.5"/>
+<text x="566" y="132" font-size="13" fill="#34d399">agent://ratings</text>
+<text x="566" y="158" font-size="19" fill="#fff" font-weight="700">#10 · 8.7 ★</text>
+<rect x="548" y="201" width="220" height="68" rx="12" fill="#0b0e1c" stroke="#34d399" stroke-opacity=".6" stroke-width="1.5"/>
+<text x="566" y="227" font-size="13" fill="#34d399">agent://summary</text>
+<text x="566" y="253" font-size="19" fill="#fff" font-weight="700">2 – 1 · FT</text>
+<rect x="548" y="296" width="220" height="68" rx="12" fill="#0b0e1c" stroke="#34d399" stroke-opacity=".6" stroke-width="1.5"/>
+<text x="566" y="322" font-size="13" fill="#34d399">agent://tactics</text>
+<text x="566" y="348" font-size="19" fill="#fff" font-weight="700">4-3-3 · high press</text>
+<text x="548" y="400" font-size="14" fill="#fff" fill-opacity=".5">→ match report</text>
+<text x="28" y="40" font-size="18" fill="#34d399" fill-opacity=".85">// football_match_analyst</text>
+<text x="772" y="40" font-size="18" fill="#fff" fill-opacity=".3" text-anchor="end">3 agents ∥</text>
+</g>
+</svg>

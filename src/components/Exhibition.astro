@@ -1,0 +1,244 @@
+---
+import Cover from './Cover.astro';
+import { getWings } from '../lib/projects';
+import { href } from '../lib/url';
+
+const { wings, numbers, projects } = await getWings();
+---
+
+<section class="section exhibition" id="projects">
+  <p class="section-kicker">// the exhibition</p>
+  <div class="head">
+    <h2>Selected work</h2>
+    <p class="count mono">{projects.length} exhibits · {wings.length} wings</p>
+  </div>
+
+  {
+    wings.map((w) => (
+      <div class="wing" id={`wing-${w.id}`} style={`--c:${w.color}`}>
+        <header class="wing-plaque">
+          <p class="w-tag mono">wing {w.letter}</p>
+          <h3>{w.label}</h3>
+          <p class="w-count mono">
+            {w.projects.length} {w.projects.length === 1 ? 'exhibit' : 'exhibits'}
+          </p>
+        </header>
+
+        <div class="wall">
+          {w.projects.map((p) => (
+            <a class="exhibit" href={href(`/projects/${p.id}/`)}>
+              <span class="spot" aria-hidden="true" />
+              <span class="frame">
+                <Cover project={p} sizes="(max-width: 720px) 100vw, 420px" />
+              </span>
+              <span class="label">
+                <span class="no mono">
+                  exhibit {numbers[p.id]} · {p.data.date.getFullYear()}
+                </span>
+                <span class="t">{p.data.title}</span>
+                {p.data.tags.length > 0 && (
+                  <span class="medium">
+                    <em>Medium:</em> {p.data.tags.slice(0, 4).join(', ')}
+                  </span>
+                )}
+                <span class="desc">{p.data.summary}</span>
+                <span class="view mono">
+                  view exhibit <span aria-hidden="true">→</span>
+                </span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))
+  }
+</section>
+
+<style>
+  .exhibition {
+    overflow-x: clip;
+  }
+  .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .count {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  .wing {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 32px;
+    padding: 44px 0 8px;
+    border-top: 1px solid var(--border);
+    scroll-margin-top: 70px;
+  }
+  .wing + .wing {
+    margin-top: 40px;
+  }
+  .wing-plaque {
+    position: sticky;
+    top: 96px;
+    align-self: start;
+  }
+  .w-tag {
+    margin: 0;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--c);
+  }
+  .wing-plaque h3 {
+    margin: 8px 0 6px;
+    font-size: 1.5rem;
+  }
+  .w-count {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .wing-plaque::after {
+    content: '';
+    display: block;
+    width: 44px;
+    height: 2px;
+    margin-top: 16px;
+    background: var(--c);
+    box-shadow: 0 0 12px var(--c);
+  }
+
+  .wall {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 56px 32px;
+    padding-top: 36px;
+  }
+
+  .exhibit {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+  }
+  /* ceiling light on each piece */
+  .spot {
+    position: absolute;
+    left: 50%;
+    top: -70px;
+    width: 120%;
+    height: 70%;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse 50% 100% at 50% 0%, rgba(255, 240, 210, 0.13), transparent 75%);
+    clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%);
+    filter: blur(4px);
+    opacity: 0.45;
+    transition: opacity 0.4s;
+    pointer-events: none;
+  }
+  .frame {
+    position: relative;
+    display: block;
+    padding: 10px;
+    border-radius: 4px;
+    background: linear-gradient(145deg, #262940, #0c0d17 60%, #1a1c2e);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+      0 24px 40px -18px rgba(0, 0, 0, 0.95);
+    transition:
+      transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+      box-shadow 0.4s;
+  }
+  .frame :global(.cover) {
+    border-radius: 2px;
+    outline: 8px solid #0b0d18;
+    outline-offset: -8px;
+  }
+
+  .label {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 22px 0 0 12px;
+    padding: 14px 16px 14px;
+    border-left: 2px solid color-mix(in srgb, var(--c) 70%, transparent);
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.035), transparent);
+  }
+  .no {
+    font-size: 0.66rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .t {
+    font: 600 1.15rem/1.25 var(--font-display);
+    transition: color 0.25s;
+  }
+  .medium {
+    font-size: 0.8rem;
+    color: color-mix(in srgb, var(--c) 55%, var(--text));
+  }
+  .medium em {
+    color: var(--muted);
+  }
+  .desc {
+    margin-top: 4px;
+    font-size: 0.88rem;
+    color: var(--muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .view {
+    margin-top: 8px;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c);
+  }
+  .view span {
+    display: inline-block;
+    transition: transform 0.25s;
+  }
+
+  .exhibit:hover .spot,
+  .exhibit:focus-visible .spot {
+    opacity: 1;
+  }
+  .exhibit:hover .frame,
+  .exhibit:focus-visible .frame {
+    transform: translateY(-6px);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--c) 45%, transparent),
+      0 30px 60px -20px color-mix(in srgb, var(--c) 45%, transparent);
+  }
+  .exhibit:hover .t,
+  .exhibit:focus-visible .t {
+    color: color-mix(in srgb, var(--c) 40%, #fff);
+  }
+  .exhibit:hover .view span,
+  .exhibit:focus-visible .view span {
+    transform: translateX(5px);
+  }
+  .exhibit:focus-visible {
+    outline: none;
+  }
+
+  @media (max-width: 860px) {
+    .wing {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+    }
+    .wing-plaque {
+      position: static;
+    }
+  }
+</style>

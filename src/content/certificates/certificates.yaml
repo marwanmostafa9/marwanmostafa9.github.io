@@ -1,0 +1,90 @@
+# The certificate shelf.
+# To add one: drop the image in this folder, then add an entry below.
+# Entries show on the shelf in the order they appear in this file.
+#
+#   - id: short-unique-name
+#     title: What the certificate is for
+#     issuer: Who gave it
+#     shelf: course | recognition
+#     date: '2025-06-15'      # or '2025-06' or '2025', optional
+#     image: file-name.jpeg   # file in this folder
+#     note: one short line     # optional
+#     accent: '#4ade80'        # optional glow color
+#     url: https://…          # optional verify link
+
+# ── Courses ───────────────────────────────────────────
+- id: agentic-systems-langchain
+  title: Designing Agentic Systems with LangChain
+  issuer: DataCamp
+  shelf: course
+  date: '2025-06-15'
+  image: agentic-systems-langchain.jpeg
+  note: 3-hour course
+  accent: '#4ade80'
+
+- id: chatgpt-prompt-engineering
+  title: ChatGPT Prompt Engineering for Developers
+  issuer: DataCamp
+  shelf: course
+  date: '2025-06-09'
+  image: chatgpt-prompt-engineering.jpeg
+  note: 4-hour course
+  accent: '#4ade80'
+
+- id: intermediate-git
+  title: Intermediate Git
+  issuer: DataCamp
+  shelf: course
+  image: intermediate-git.jpeg
+  accent: '#fbbf24'
+
+- id: database-fundamentals
+  title: Database Fundamentals
+  issuer: Mahara-Tech · ITI
+  shelf: course
+  image: database-fundamentals.jpeg
+  note: Information Technology Institute platform, 2 h 47 min
+  accent: '#f87171'
+
+- id: duke-programming-fundamentals
+  title: Programming Fundamentals
+  issuer: Duke University · Coursera
+  shelf: course
+  date: '2020-08-07'
+  image: duke-programming-fundamentals.jpg
+  url: https://coursera.org/verify/QHS6DN5SY7Z2
+  accent: '#93c5fd'
+
+# ── Recognition ───────────────────────────────────────
+- id: coldwell-banker-2024
+  title: Certificate of Appreciation
+  issuer: Coldwell Banker Egypt
+  shelf: recognition
+  date: '2024'
+  image: coldwell-banker-2024.jpeg
+  note: Special thanks for my efforts in 2024
+  accent: '#818cf8'
+
+- id: gdsc-ml-workshop
+  title: Top Student, Machine Learning Workshop
+  issuer: GDSC Cairo University · FCAI
+  shelf: recognition
+  image: gdsc-ml-workshop.jpeg
+  note: Google Developer Student Clubs
+  accent: '#fbbf24'
+
+- id: tofas-appreciation
+  title: Appreciation for the TOFAS Competition
+  issuer: Ministry of Education, Egypt
+  shelf: recognition
+  image: tofas-appreciation.jpeg
+  note: For helping run the TOFAS competition in schools across Cairo, Giza and Alexandria
+  accent: '#e9c46a'
+
+- id: taqaddam-ambassador-2018
+  title: Student Ambassador, Egypt
+  issuer: Taqaddam
+  shelf: recognition
+  date: '2018'
+  image: taqaddam-ambassador-2018.jpg
+  accent: '#c084fc'

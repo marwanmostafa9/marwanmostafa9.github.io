@@ -1,0 +1,391 @@
+---
+import { SITE } from '../config/site';
+import { getWings } from '../lib/projects';
+import { getCertificates } from '../lib/certificates';
+import { MURAL_H as H, MURAL_W as W, muralSvg } from '../lib/mural';
+
+const { wings, projects, from, to } = await getWings();
+const certCount = (await getCertificates()).length;
+
+// A neural-network "mural" sketched on the wall. The visitor's light reveals it.
+const mural = muralSvg(SITE.name);
+---
+
+<section class="entrance" id="top">
+  <div class="wall" aria-hidden="true"></div>
+  <svg class="mural base" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMid slice" aria-hidden="true"><Fragment set:html={mural} /></svg>
+  <svg class="mural lit" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMid slice" aria-hidden="true"><Fragment set:html={mural} /></svg>
+  <div class="torch" aria-hidden="true"></div>
+  <div class="ceiling" aria-hidden="true"><span></span><span></span></div>
+  <div class="floor" aria-hidden="true"></div>
+
+  <div class="inner">
+    <div class="sign">
+      <p class="plaque mono">Now showing · selected work {from}–{to}</p>
+      <h1>{SITE.name}</h1>
+      <p class="role">
+        <span>{SITE.role}</span><span class="caret" aria-hidden="true"></span>
+      </p>
+      <p class="tagline">{SITE.tagline}</p>
+      <div class="cta">
+        <a class="btn primary" href="#projects">Enter the exhibition ↓</a>
+        <a class="btn" href="#contact">Front desk</a>
+      </div>
+    </div>
+
+    <nav class="plan" aria-label="Floor plan">
+      <p class="plan-title mono">floor plan <span>· {projects.length} exhibits</span></p>
+      <div class="rooms">
+        {
+          wings.map((w) => (
+            <a class="room" href={`#wing-${w.id}`} style={`--c:${w.color}`}>
+              <span class="r-tag mono">wing {w.letter}</span>
+              <span class="r-name">{w.label}</span>
+              <span class="r-count mono">
+                {w.projects.length} {w.projects.length === 1 ? 'exhibit' : 'exhibits'}
+              </span>
+            </a>
+          ))
+        }
+        <a class="room" href="#certificates" style="--c:#d6b77a">
+          <span class="r-tag mono">hall</span>
+          <span class="r-name">Hall of Honors</span>
+          <span class="r-count mono">{certCount} certificates</span>
+        </a>
+        <a class="room" href="#contact" style="--c:#e8eaf6">
+          <span class="r-tag mono">desk</span>
+          <span class="r-name">Front Desk</span>
+          <span class="r-count mono">say hello</span>
+        </a>
+      </div>
+      <p class="here mono"><i></i> you are here · entrance</p>
+    </nav>
+  </div>
+</section>
+
+<style>
+  .entrance {
+    --brass: #d6b77a;
+    --mx: 30%;
+    --my: 40%;
+    position: relative;
+    min-height: max(100svh, 680px);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: #06070d;
+    isolation: isolate;
+  }
+
+  /* wall panels */
+  .wall {
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(90deg, transparent 0 239px, rgba(255, 255, 255, 0.025) 239px 240px),
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(214, 183, 122, 0.06), transparent 70%),
+      linear-gradient(#0a0b14, #06070d 80%);
+  }
+
+  .mural {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .mural :global(.m-lines) {
+    fill: none;
+    stroke: #c4b5fd;
+    stroke-width: 1;
+  }
+  .mural :global(.m-nodes) {
+    fill: #06070d;
+    stroke: #c4b5fd;
+    stroke-width: 1.6;
+  }
+  .mural :global(.m-notes) {
+    fill: #fde68a;
+    font: 22px var(--font-mono);
+  }
+  .mural.base {
+    opacity: 0.05;
+  }
+  .mural.lit {
+    opacity: 0.75;
+    -webkit-mask-image: radial-gradient(circle 240px at var(--mx) var(--my), #000 0%, rgba(0, 0, 0, 0.5) 45%, transparent 100%);
+    mask-image: radial-gradient(circle 240px at var(--mx) var(--my), #000 0%, rgba(0, 0, 0, 0.5) 45%, transparent 100%);
+  }
+  .torch {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle 320px at var(--mx) var(--my), rgba(214, 183, 122, 0.1), transparent 70%);
+    pointer-events: none;
+  }
+
+  /* spotlights from the ceiling onto the sign */
+  .ceiling span {
+    position: absolute;
+    top: -10px;
+    width: 520px;
+    height: 110%;
+    background: linear-gradient(to bottom, rgba(255, 240, 210, 0.13), rgba(255, 240, 210, 0.02) 70%, transparent);
+    clip-path: polygon(46% 0, 54% 0, 100% 100%, 0 100%);
+    filter: blur(6px);
+    pointer-events: none;
+    animation: flicker 7s ease-in-out infinite;
+  }
+  .ceiling span:first-child {
+    left: calc(var(--gutter) + 40px);
+  }
+  .ceiling span:last-child {
+    right: calc(var(--gutter) - 40px);
+    width: 460px;
+    background: linear-gradient(to bottom, rgba(196, 181, 253, 0.1), rgba(196, 181, 253, 0.02) 70%, transparent);
+    animation-delay: -3s;
+  }
+  @keyframes flicker {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.75;
+    }
+  }
+
+  .floor {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 16%;
+    background:
+      radial-gradient(ellipse 30% 60% at 22% 0%, rgba(255, 240, 210, 0.07), transparent 70%),
+      radial-gradient(ellipse 25% 60% at 80% 0%, rgba(196, 181, 253, 0.06), transparent 70%),
+      linear-gradient(#0b0c16, #04050b);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 110px var(--gutter) 120px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: clamp(32px, 6vw, 90px);
+    align-items: center;
+  }
+
+  .plaque {
+    display: inline-block;
+    margin: 0 0 22px;
+    padding: 6px 12px;
+    border: 1px solid color-mix(in srgb, var(--brass) 55%, transparent);
+    border-radius: 4px;
+    background: linear-gradient(180deg, rgba(214, 183, 122, 0.12), rgba(214, 183, 122, 0.04));
+    color: var(--brass);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  h1 {
+    font-size: clamp(3rem, 8.5vw, 6.2rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 0.98;
+    background: linear-gradient(180deg, #fff 20%, #cfd3f2 70%, #9aa0c8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 6px 30px rgba(255, 240, 210, 0.12));
+  }
+  .role {
+    margin: 14px 0 0;
+    font: 500 clamp(1.1rem, 2.4vw, 1.45rem) var(--font-mono);
+  }
+  .caret {
+    display: inline-block;
+    width: 0.55em;
+    height: 1.1em;
+    margin-left: 4px;
+    vertical-align: -0.18em;
+    background: var(--accent);
+    animation: blink 1.1s steps(1) infinite;
+  }
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  .tagline {
+    margin: 14px 0 28px;
+    max-width: 44ch;
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  /* floor plan */
+  .plan {
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background:
+      linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px) 0 0 / 20px 20px,
+      linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px) 0 0 / 20px 20px,
+      rgba(10, 12, 24, 0.78);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.9);
+  }
+  .plan-title {
+    margin: 0 0 14px;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+  }
+  .plan-title span {
+    color: var(--muted);
+  }
+  .rooms {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .room {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 12px 12px 11px;
+    min-height: 84px;
+    border: 1px dashed color-mix(in srgb, var(--c) 40%, transparent);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--c) 5%, transparent);
+    text-decoration: none;
+    transition:
+      background 0.25s,
+      border-color 0.25s,
+      transform 0.25s,
+      box-shadow 0.25s;
+  }
+  .room:hover,
+  .room:focus-visible {
+    border-style: solid;
+    border-color: var(--c);
+    background: color-mix(in srgb, var(--c) 14%, transparent);
+    box-shadow: 0 0 30px -8px color-mix(in srgb, var(--c) 70%, transparent);
+    transform: translateY(-2px);
+    outline: none;
+  }
+  .r-tag {
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--c);
+  }
+  .r-name {
+    font: 600 0.92rem/1.2 var(--font-display);
+  }
+  .r-count {
+    margin-top: auto;
+    font-size: 0.66rem;
+    color: var(--muted);
+  }
+  .here {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 14px 0 0;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .here i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #f472b6;
+    box-shadow: 0 0 0 0 rgba(244, 114, 182, 0.6);
+    animation: here 1.8s ease-out infinite;
+  }
+  @keyframes here {
+    to {
+      box-shadow: 0 0 0 10px rgba(244, 114, 182, 0);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .inner {
+      grid-template-columns: minmax(0, 1fr);
+      padding-top: 100px;
+      padding-bottom: 90px;
+    }
+    .ceiling span:last-child {
+      display: none;
+    }
+    .room {
+      min-height: 72px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ceiling span,
+    .here i,
+    .caret {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const hero = document.querySelector<HTMLElement>('.entrance');
+  if (hero) {
+    let x = 0.3;
+    let y = 0.4;
+    let tx = x;
+    let ty = y;
+    let lastMove = -1e9;
+    let visible = true;
+    let raf = 0;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    hero.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      const r = hero.getBoundingClientRect();
+      tx = (e.clientX - r.left) / r.width;
+      ty = (e.clientY - r.top) / r.height;
+      lastMove = performance.now();
+    });
+
+    function frame(t: number) {
+      // when the visitor isn't moving the mouse, the light wanders on its own
+      if (t - lastMove > 2500) {
+        tx = 0.5 + 0.36 * Math.sin(t / 4200);
+        ty = 0.45 + 0.28 * Math.sin(t / 2900 + 1);
+      }
+      x += (tx - x) * 0.08;
+      y += (ty - y) * 0.08;
+      hero!.style.setProperty('--mx', `${(x * 100).toFixed(2)}%`);
+      hero!.style.setProperty('--my', `${(y * 100).toFixed(2)}%`);
+      raf = visible ? requestAnimationFrame(frame) : 0;
+    }
+
+    if (!reduce) {
+      new IntersectionObserver(([e]) => {
+        visible = e.isIntersecting;
+        if (visible && !raf) raf = requestAnimationFrame(frame);
+      }).observe(hero);
+    }
+  }
+</script>

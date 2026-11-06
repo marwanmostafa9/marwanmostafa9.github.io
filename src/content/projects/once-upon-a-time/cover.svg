@@ -1,0 +1,78 @@
+<svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A storybook page is turned into four generated illustrations, and the reader picks one">
+<defs>
+<radialGradient id="ou-bg" cx=".55" cy=".5" r=".75"><stop offset="0" stop-color="#fb923c" stop-opacity=".22"/><stop offset="1" stop-color="#fb923c" stop-opacity="0"/></radialGradient>
+<pattern id="ou-dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#fff" fill-opacity=".07"/></pattern>
+<linearGradient id="ou-s1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1e1b4b"/><stop offset="1" stop-color="#7c2d12"/></linearGradient>
+<linearGradient id="ou-s2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdba74"/><stop offset="1" stop-color="#9a3412"/></linearGradient>
+<linearGradient id="ou-s3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c4a6e"/><stop offset="1" stop-color="#fb923c"/></linearGradient>
+<linearGradient id="ou-s4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#312e81"/></linearGradient>
+<clipPath id="ou-c1"><rect x="390" y="96" width="165" height="112" rx="8"/></clipPath>
+<clipPath id="ou-c2"><rect x="567" y="96" width="165" height="112" rx="8"/></clipPath>
+<clipPath id="ou-c3"><rect x="390" y="220" width="165" height="112" rx="8"/></clipPath>
+<clipPath id="ou-c4"><rect x="567" y="220" width="165" height="112" rx="8"/></clipPath>
+<filter id="ou-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="800" height="450" fill="#070912"/>
+<rect width="800" height="450" fill="url(#ou-bg)"/>
+<rect width="800" height="450" fill="url(#ou-dots)"/>
+<!-- open book -->
+<path d="M175 150C140 136 92 134 52 146V326C92 314 140 316 175 330Z" fill="#1b1e33" stroke="#fff" stroke-opacity=".18"/>
+<path d="M175 150C210 136 258 134 298 146V326C258 314 210 316 175 330Z" fill="#20243d" stroke="#fb923c" stroke-opacity=".55" stroke-width="1.5"/>
+<path d="M175 150V330" stroke="#fff" stroke-opacity=".2"/>
+<g fill="#fff" fill-opacity=".22">
+<rect x="68" y="168" width="90" height="5" rx="2.5"/><rect x="68" y="182" width="80" height="5" rx="2.5"/><rect x="68" y="196" width="94" height="5" rx="2.5"/><rect x="68" y="210" width="70" height="5" rx="2.5"/><rect x="68" y="232" width="90" height="5" rx="2.5"/><rect x="68" y="246" width="86" height="5" rx="2.5"/><rect x="68" y="260" width="60" height="5" rx="2.5"/><rect x="68" y="282" width="92" height="5" rx="2.5"/><rect x="68" y="296" width="76" height="5" rx="2.5"/>
+<rect x="192" y="210" width="92" height="5" rx="2.5"/><rect x="192" y="224" width="84" height="5" rx="2.5"/><rect x="192" y="238" width="90" height="5" rx="2.5"/><rect x="192" y="252" width="66" height="5" rx="2.5"/><rect x="192" y="274" width="92" height="5" rx="2.5"/><rect x="192" y="288" width="80" height="5" rx="2.5"/><rect x="192" y="302" width="54" height="5" rx="2.5"/>
+</g>
+<text x="192" y="180" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="19" fill="#fdba74">Once upon</text>
+<text x="192" y="199" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="19" fill="#fdba74">a time…</text>
+<!-- arrow with sparkles -->
+<path d="M312 214H368" stroke="#fb923c" stroke-width="2" stroke-dasharray="4 5"/>
+<path d="M366 207L378 214L366 221Z" fill="#fb923c"/>
+<g fill="#fdba74" filter="url(#ou-glow)">
+<path d="M336 186l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"/>
+<path d="M352 236l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/>
+</g>
+<!-- tile 1: castle under the moon -->
+<g clip-path="url(#ou-c1)">
+<rect x="390" y="96" width="165" height="112" fill="url(#ou-s1)"/>
+<circle cx="520" cy="122" r="12" fill="#fde68a"/>
+<path d="M390 208V178C420 168 450 170 480 176C510 182 535 176 555 170V208Z" fill="#0b0b1a"/>
+<path d="M436 176V146h8v-8h6v8h10v-8h6v8h8v30z" fill="#0b0b1a"/>
+<path d="M448 146l7-12 7 12z" fill="#0b0b1a"/>
+</g>
+<!-- tile 2: forest at sunrise (selected) -->
+<g clip-path="url(#ou-c2)">
+<rect x="567" y="96" width="165" height="112" fill="url(#ou-s2)"/>
+<circle cx="650" cy="168" r="22" fill="#fff7ed" fill-opacity=".9"/>
+<g fill="#431407">
+<path d="M567 208l18-50 18 50z"/><path d="M590 208l16-42 16 42z"/><path d="M615 208l20-58 20 58z"/><path d="M660 208l16-44 16 44z"/><path d="M684 208l20-56 20 56z"/><path d="M710 208l14-38 14 38z"/>
+</g>
+</g>
+<!-- tile 3: mountains and river -->
+<g clip-path="url(#ou-c3)">
+<rect x="390" y="220" width="165" height="112" fill="url(#ou-s3)"/>
+<path d="M390 300l40-50 30 34 34-48 38 52 23-18V332H390z" fill="#1c1917" fill-opacity=".85"/>
+<path d="M455 332C470 316 490 312 505 300" stroke="#bae6fd" stroke-width="5" fill="none" stroke-linecap="round"/>
+</g>
+<!-- tile 4: ship on a starry sea -->
+<g clip-path="url(#ou-c4)">
+<rect x="567" y="220" width="165" height="112" fill="url(#ou-s4)"/>
+<g fill="#fff"><circle cx="590" cy="240" r="1.5"/><circle cx="625" cy="232" r="1"/><circle cx="700" cy="244" r="1.5"/><circle cx="715" cy="234" r="1"/><circle cx="660" cy="250" r="1"/></g>
+<path d="M567 300C590 294 610 306 635 300C660 294 690 306 732 298V332H567z" fill="#1e3a8a"/>
+<path d="M626 296h50l-10 12h-32z" fill="#fb923c"/>
+<path d="M650 296V256l20 34z" fill="#fff7ed"/><path d="M648 296V264l-16 28z" fill="#fed7aa"/>
+</g>
+<!-- frames -->
+<g fill="none" stroke="#fff" stroke-opacity=".18">
+<rect x="390" y="96" width="165" height="112" rx="8"/><rect x="390" y="220" width="165" height="112" rx="8"/><rect x="567" y="220" width="165" height="112" rx="8"/>
+</g>
+<rect x="565" y="94" width="169" height="116" rx="10" fill="none" stroke="#fb923c" stroke-width="3" filter="url(#ou-glow)"/>
+<circle cx="732" cy="96" r="13" fill="#fb923c"/>
+<path d="M726 96l4 4 8-8" stroke="#070912" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<g font-family="JetBrains Mono, ui-monospace, monospace">
+<text x="175" y="372" font-size="13" fill="#fff" fill-opacity=".45" text-anchor="middle">text · image · PDF page</text>
+<text x="561" y="362" font-size="13" fill="#fff" fill-opacity=".45" text-anchor="middle">4 options → pick &amp; download ↓</text>
+<text x="28" y="40" font-size="18" fill="#fb923c" fill-opacity=".85">// once_upon_a_time</text>
+<text x="772" y="40" font-size="18" fill="#fff" fill-opacity=".3" text-anchor="end">pixel-perfect</text>
+</g>
+</svg>
