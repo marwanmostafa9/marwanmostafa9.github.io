@@ -1,0 +1,14 @@
+# Cloudflare Worker behind the portfolio's "Ask about Marwan" chat.
+# Deploy: see chat-worker/README.md
+name = "marwan-cv-chat"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+# Tried in order; the next one is used when a model is rate-limited or retired.
+# Current Groq models: https://console.groq.com/docs/models
+MODELS = "openai/gpt-oss-120b,openai/gpt-oss-20b,qwen/qwen3.8-27b"
+# Only these sites may call the worker (4321 = astro dev / preview).
+ALLOWED_ORIGINS = "https://marwanmostafa9.github.io,http://localhost:4321"
+
+# GROQ_API_KEY is a secret: `npx wrangler@3 secret put GROQ_API_KEY` (never put it here).

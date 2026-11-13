@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import CvChat from '../components/CvChat.astro';
 import { SITE } from '../config/site';
 import { href } from '../lib/url';
 
@@ -29,5 +30,6 @@ const fullTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} — ${SITE.
     <Nav />
     <slot />
     <Footer />
+    <CvChat />
   </body>
 </html>

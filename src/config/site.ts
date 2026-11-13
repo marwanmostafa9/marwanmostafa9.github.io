@@ -10,4 +10,6 @@ export const SITE = {
     // International format, digits only (Egypt = 20). Leave '' to hide phone and WhatsApp.
     phone: '201143796358',
   },
+  // URL of the deployed chat worker (chat-worker/). Leave '' to hide the "Ask about Marwan" chat.
+  chatEndpoint: 'https://marwan-cv-chat.marwanmostafa9.workers.dev',
 };

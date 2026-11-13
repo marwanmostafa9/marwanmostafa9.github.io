@@ -6,3 +6,12 @@ dist/
 # Drop zone for raw files you send to Claude; not published
 _inbox/*
 !_inbox/README.txt
+
+# personal CV files (kept private, never published)
+/*.pdf
+/cv/
+
+# chat worker: local CV knowledge + secrets
+chat-worker/src/cv.txt
+chat-worker/.dev.vars
+chat-worker/.wrangler/
